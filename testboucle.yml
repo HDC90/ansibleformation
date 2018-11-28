@@ -1,0 +1,10 @@
+---
+- hosts: debian
+  tasks:
+   - name: installation outils
+     apt: name={{ item }} state=present
+     with_items:
+      - htop
+      - vim
+      - zsh
+   
