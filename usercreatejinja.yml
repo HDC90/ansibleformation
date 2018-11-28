@@ -1,0 +1,15 @@
+---
+- hosts: all
+  vars:
+    user: antoine
+  tasks:
+    - name: creation users
+      user:
+        name: '{{ user }}'
+        shell: /bin/bash
+        state: present
+    - name: donner la clé ssh vers user
+      authorized_key:
+        user: '{{ user }}'
+        state: present
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"

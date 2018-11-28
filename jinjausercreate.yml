@@ -1,0 +1,17 @@
+---
+- hosts: all
+  vars:
+    user: antoine
+  tasks:
+    - name: creation users
+      user:
+        name: '{{ user }}'
+        shell: /bin/bash
+        state: present
+    - name: donner la clé ssh vers user
+      authorized_key:
+        user: '{{ user }}'
+        state: present
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    - name: utiliser jinja2 template
+      template: src=ipv4.j2 dest=/test/ipv4
