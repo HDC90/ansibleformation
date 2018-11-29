@@ -36,12 +36,19 @@
         owner: '{{ user }}'
         state: link
         force: yes
-    - name: example copying file with owner and permissions
-      copy:
-        src: /etc/ansible/local.dev
-        dest: /etc/nginx/sites-available/local.dev
-    #- name: linker fichiers de conf
-    #  command: ln -s /etc/nginx/sites-available/local.dev /etc/nginx/sites-enabled/
+    - name: template jinja 2
+      template:
+        src: templates/nginx.j2
+        dest: /etc/nginx/sites-available/{{ local }}
+    - name: link fichier de conf
+      file:
+        src: '/etc/nginx/sites-available/{{ local }}'
+        dest: '/etc/nginx/sites-enabled/{{ local }}'
+        state: link
+    - name: supprime default
+      file:
+        path: /etc/nginx/sites-available/default
+        state: absent
     - name: restart nginx
       systemd:
         name: nginx
