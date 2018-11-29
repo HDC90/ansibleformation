@@ -1,0 +1,34 @@
+---
+- hosts: debian
+  vars:
+   user: dev
+   local: local.dev
+
+  tasks:
+    - name: update debian
+      apt: update_cache=yes
+    - name: desinstall la mere a apache2
+      apt:
+        name: apache2
+        state: absent
+    - name: install son pere a nginx
+      apt:
+        name: nginx
+        state: present    
+    - name: creation users
+      user:
+        name: '{{ user }}'
+        shell: /bin/bash
+        state: present
+    - name: donner la clé ssh vers user
+      authorized_key:
+        user: '{{ user }}'
+        state: present
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    - name: link le dossier de user avec le docroot
+      file:
+        src: '/var/www/html/{{local}}'
+        dest: '/home/{{ user }}/web'
+        owner: '{{ user }}'
+        state: link
+        force: yes
