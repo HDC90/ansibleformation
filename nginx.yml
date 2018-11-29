@@ -7,11 +7,11 @@
   tasks:
     - name: update debian
       apt: update_cache=yes
-    - name: desinstall la mere a apache2
+    - name: desinstall  apache2
       apt:
         name: apache2
         state: absent
-    - name: install son pere a nginx
+    - name: install  nginx
       apt:
         name: nginx
         state: present    
@@ -25,6 +25,10 @@
         user: '{{ user }}'
         state: present
         key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    - name: creer dossier localdev
+      file:
+        path: '/var/www/html/{{local}}'
+        state: directory
     - name: link le dossier de user avec le docroot
       file:
         src: '/var/www/html/{{local}}'
@@ -32,3 +36,13 @@
         owner: '{{ user }}'
         state: link
         force: yes
+    - name: example copying file with owner and permissions
+      copy:
+        src: /etc/ansible/local.dev
+        dest: /etc/nginx/sites-available/local.dev
+    #- name: linker fichiers de conf
+    #  command: ln -s /etc/nginx/sites-available/local.dev /etc/nginx/sites-enabled/
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: reloaded
