@@ -1,55 +1,11 @@
 ---
 - hosts: debian
   vars:
-   user: dev
-   local: local.dev
-
+    user: dev
+    local: local.dev
   tasks:
-    - name: update debian
-      apt: update_cache=yes
-    - name: desinstall  apache2
-      apt:
-        name: apache2
-        state: absent
-    - name: install  nginx
-      apt:
-        name: nginx
-        state: present    
-    - name: creation users
-      user:
-        name: '{{ user }}'
-        shell: /bin/bash
-        state: present
-    - name: donner la clé ssh vers user
-      authorized_key:
-        user: '{{ user }}'
-        state: present
-        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
-    - name: creer dossier localdev
-      file:
-        path: '/var/www/html/{{local}}'
-        state: directory
-    - name: link le dossier de user avec le docroot
-      file:
-        src: '/var/www/html/{{local}}'
-        dest: '/home/{{ user }}/web'
-        owner: '{{ user }}'
-        state: link
-        force: yes
-    - name: template jinja 2
-      template:
-        src: templates/nginx.j2
-        dest: /etc/nginx/sites-available/{{ local }}
-    - name: link fichier de conf
-      file:
-        src: '/etc/nginx/sites-available/{{ local }}'
-        dest: '/etc/nginx/sites-enabled/{{ local }}'
-        state: link
-    - name: supprime default
-      file:
-        path: /etc/nginx/sites-available/default
-        state: absent
-    - name: restart nginx
-      systemd:
-        name: nginx
-        state: reloaded
+  roles:
+    - nginx
+    - user
+    - tools
+    - docker

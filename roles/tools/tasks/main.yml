@@ -1,0 +1,11 @@
+---
+# tasks file for tools
+- name: update debian
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - htop
+    - zsh
+    - vim
+    - emacs
