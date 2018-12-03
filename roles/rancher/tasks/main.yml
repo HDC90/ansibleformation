@@ -1,0 +1,11 @@
+---
+# tasks file for rancher
+- name: image rancher
+  docker_container:
+    name: rancher
+    image: rancher/server
+    state: started
+    restart: yes
+    ports:
+     - 7000:8080
+     - 7443:443

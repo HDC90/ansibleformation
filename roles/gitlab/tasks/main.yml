@@ -2,14 +2,28 @@
 # tasks file for gitlab
 - pip: 
     name: docker-py
+- pip: 
+    name: setuptools
+- name: create directory if they don't exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /srv/gitlab/config
+    - /srv/gitlab/logs
+    - /srv/gitlab/data
 - name: image gitlab
   docker_container:
+    hostname: gitlab.example.com
     name: gitlab
     image: gitlab/gitlab-ce
-    state: present
+    state: started
     restart: yes
-    exposed_ports:
-     - 80
-     - 443
-     - 22
-    volumes
+    ports:
+     - 8000:80
+     - 4430:443
+     - 22:22
+    volumes:
+     - /srv/gitlab/config:/etc/gitlab
+     - /srv/gitlab/logs:/var/log/gitlab
+     - /srv/gitlab/data:/var/opt/gitlab

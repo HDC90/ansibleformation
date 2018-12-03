@@ -1,0 +1,6 @@
+---
+- hosts: nodes
+  tasks:
+  roles:
+    - tools
+    - docker

@@ -8,5 +8,6 @@
     - nginx
     - user
     - tools
-    - docker
-    - gitlab
+    #- docker
+    #- gitlab
+    - rancher
