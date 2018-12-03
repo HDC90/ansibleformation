@@ -29,11 +29,11 @@
   apt:
     update_cache: yes
 - name: curl install stable depo
-  command: "deb [arch=amd64] https://download.docker.com/linux/debian stable"    
-- name: update
-  apt:
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
     update_cache: yes
 - name: installer docker
   apt:
     name: docker-ce
     state: present
+    update_cache: yes

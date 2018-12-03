@@ -1,0 +1,15 @@
+---
+# tasks file for gitlab
+- pip: 
+    name: docker-py
+- name: image gitlab
+  docker_container:
+    name: gitlab
+    image: gitlab/gitlab-ce
+    state: present
+    restart: yes
+    exposed_ports:
+     - 80
+     - 443
+     - 22
+    volumes
