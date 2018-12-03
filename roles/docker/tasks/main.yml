@@ -29,7 +29,7 @@
   apt:
     update_cache: yes
 - name: curl install stable depo
-  command: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"    
+  command: "deb [arch=amd64] https://download.docker.com/linux/debian stable"    
 - name: update
   apt:
     update_cache: yes
