@@ -2,7 +2,11 @@
 - hosts: debian
   vars:
     user: dev
-    local: local.dev
+    locals:
+      - local: local.dev
+        php: yes
+      - local: test.org
+        php: no
   tasks:
   roles:
     - nginx
@@ -10,4 +14,4 @@
     - tools
     #- docker
     #- gitlab
-    - rancher
+    #- rancher

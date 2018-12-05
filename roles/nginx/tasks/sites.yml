@@ -1,0 +1,23 @@
+---
+# tasks file for nginx
+- name: creer dossier localdev
+  file:
+    path: '/var/www/html/{{item}}'
+    state: directory
+- name: link le dossier de user avec le docroot
+  file:
+    src: '/var/www/html/{{item}}'
+    dest: '/home/{{ user }}/web'
+    owner: '{{ user }}'
+    state: link
+    force: yes
+- name: template jinja 2
+  template:
+    src: templates/nginx.j2
+    dest: /etc/nginx/sites-available/{{ item }}
+    force: yes
+- name: link fichier de conf
+  file:
+    src: '/etc/nginx/sites-available/{{ item }}'
+    dest: '/etc/nginx/sites-enabled/{{ item }}'
+    state: link

@@ -2,8 +2,33 @@ server {
        listen 80;
        listen [::]:80;
 
-       server_name {{ local }};
+       server_name {{ item }};
        
-       root /var/www/html/{{ local }};
-       index index.html;
+       root /var/www/html/{{ item }};
+       
+       {% if index.php%}
+       index index.php index.html;
+
+        
+        location ~ \.php$ {
+
+            try_files $uri =404;
+
+            fastcgi_pass 192.168.229.138:9000;
+
+            fastcgi_index index.php;
+
+            #fastcgi_pass unix:/var/run/php7.0-fpm-sock;
+
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+            include /etc/nginx/fastcgi_params;
+
+        }
+
+        {% else %}
+        index index.html;
+        {% endif %}
+
 }
+

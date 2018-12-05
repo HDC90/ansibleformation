@@ -11,26 +11,6 @@
   apt:
     name: nginx
     state: present
-- name: creer dossier localdev
-  file:
-    path: '/var/www/html/{{local}}'
-    state: directory
-- name: link le dossier de user avec le docroot
-  file:
-    src: '/var/www/html/{{local}}'
-    dest: '/home/{{ user }}/web'
-    owner: '{{ user }}'
-    state: link
-    force: yes
-- name: template jinja 2
-  template:
-    src: templates/nginx.j2
-    dest: /etc/nginx/sites-available/{{ local }}
-- name: link fichier de conf
-  file:
-    src: '/etc/nginx/sites-available/{{ local }}'
-    dest: '/etc/nginx/sites-enabled/{{ local }}'
-    state: link
 - name: supprime default
   file:
     path: /etc/nginx/sites-available/default
@@ -39,3 +19,9 @@
   systemd:
     name: nginx
     state: reloaded
+- name: configuration des sites
+  include: sites.yml
+  with_items: "{{ locals }}"
+- name: installation php
+  include: php.yml
+  notify: service php
